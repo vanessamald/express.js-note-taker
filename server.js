@@ -18,11 +18,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
-//const { notes } = require('./Develop/public/assets');
+//const { notes } = require('./Develop/public/notes.html');
 
-//app.get('api/notes', (req, res) => {
-   // res.send('Hello World!');
-//});
+app.get('/notes', (req, res) => {
+    res.sendFile(path.join(__dirname, './Develop/public/notes.html'));
+    //res.send('Hello World!');
+});
 
 
 
