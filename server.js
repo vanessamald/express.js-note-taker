@@ -41,7 +41,8 @@ app.post('/api/notes', (req, res) => {
     //TESTING HERE
     console.info(`${req.method} request received to add a note`);
     const getNotes = JSON.parse(fs.readFileSync('./Develop/db/db.json'));
-
+    const newNotes = req.body;
+    /*
     // destructure req.body
     const [ {title, text} ] = req.body;
 
@@ -49,13 +50,14 @@ app.post('/api/notes', (req, res) => {
         title,
         text
     };
+    */
     //console.log(newNotes);
 
     getNotes.push(newNotes);
     console.log(newNotes);
 
     fs.writeFileSync('./Develop/db/db.json', JSON.stringify(getNotes));
-
+    res.json(getNotes);
 });
   
 // add index.js
