@@ -3,29 +3,30 @@ const path = require('path');
 
 const router = require('express').Router();
 
+
 const PORT = process.env.PORT || 3001;
 
 //const apiRoutes = require('./Develop/public/assets/js');
 
-// api routes
-const notes = require('./Develop/db/db.json');
-
 // require express
 const express = require('express');
 const { readList } = require('./Develop/db/db');
+const { get } = require('express/lib/request');
 
 // initiate the server
 const app = express();
 
-//app.use(express.static(path.join(__dirname, './Develop/public/assets/js/index.js')));
 
 // parse string or array of incoming data POST data
 app.use(express.urlencoded({ extended: true }));
 
 // parse json POST data
 app.use(express.json());
-// middleware for css
-app.use(express.static(path.join(__dirname, 'public/assets')));
+
+// middleware for css and js static files
+app.use(express.static('Develop/public'))
+app.use('assets/css', express.static(__dirname + 'public/assets/css'))
+app.use('assets/js', express.static(__dirname + 'public/assets/js'))
 
 
 // GET api route
@@ -39,47 +40,24 @@ app.get('/api/notes', (req, res) => {
 app.post('/api/notes', (req, res) => {
     //TESTING HERE
     console.info(`${req.method} request received to add a note`);
-    
+    const getNotes = JSON.parse(fs.readFileSync('./Develop/db/db.json'));
+
     // destructure req.body
-    const [ {title, text} ] = req.body
+    const [ {title, text} ] = req.body;
 
-    // if properties exist
-    if (title && text) {
-
-    // variable for notes 
-    const newNote = {
+    const newNotes =  {
         title,
         text
     };
+    //console.log(newNotes);
 
-    // obtain existing notes
-    fs.readFile('./Develop/db/db.json', 'utf8', (err, data) => {
-    
-    res.json(req.body);
-    //console.log(req.body);
-        if (err) {
-            console.error(err);
-        } else {
-            // convert string to JSON object
-            const parsedNotes = JSON.parse(data);
-            // parse data
-            parsedNotes.push(newNote);
+    getNotes.push(newNotes);
+    console.log(newNotes);
 
-    
-            fs.writeFileSync('./Develop/db/db.json', JSON.stringify(parsedNotes, null, 4),
-            (writeErr) =>
-            writeErr
-            ? console.error(writeErr)
-            : console.info('SUCCESS!!!')
+    fs.writeFileSync('./Develop/db/db.json', JSON.stringify(getNotes));
 
-            
-           );
-           console.log(newNote);
-        }
-      });
-    }
 });
-
+  
 // add index.js
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, './Develop/public/index.html'));
