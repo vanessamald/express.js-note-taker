@@ -4,9 +4,11 @@ const router = require('express').Router();
 const path = require('path');
 const fs = require('fs');
 const getNotes = require('../Develop/db/db.json');
+const { v4: uuidv4 } = require('uuid');
 
 const util = require('util');
 const { json } = require('express/lib/response');
+const { randomUUID } = require('crypto');
 const readFileAsync = util.promisify(fs.readFile);
 
 // parse json POST data
@@ -25,6 +27,7 @@ router.post('/notes', (req, res) => {
     console.info(`${req.method} request received to add a note`);
     const notes = JSON.parse(fs.readFileSync('./Develop/db/db.json'));
     let newNote = req.body;
+    newNote.id = uuidv4();
     notes.push(newNote);
 
     fs.writeFileSync('./Develop/db/db.json', JSON.stringify(notes))
