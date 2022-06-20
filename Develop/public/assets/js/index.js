@@ -58,24 +58,24 @@ const renderActiveNote = () => {
     noteText.setAttribute('readonly', true);
     noteTitle.value = activeNote.title;
     noteText.value = activeNote.text;
-  } else {
-    noteTitle.removeAttribute('readonly');
-    noteText.removeAttribute('readonly');
-    noteTitle.value = '';
-    noteText.value = '';
+  //} else {
+   // noteTitle.removeAttribute('readonly');
+   // noteText.removeAttribute('readonly');
+   // noteTitle.value = '';
+   // noteText.value = '';
   }
+  console.log(noteTitle.value, noteText.value);
 };
 
 const handleNoteSave = () => {
-  console.log("BUTTON WORKS!");
   const newNote = {
     title: noteTitle.value,
     text: noteText.value,
   };
-  saveNote(newNote).then(() => {
+  saveNote(newNote); //.then(() => {
     getAndRenderNotes();
     renderActiveNote();
-  });
+  //});
 };
 
 // Delete the clicked note
@@ -98,7 +98,7 @@ const handleNoteDelete = (e) => {
 
 // Sets the activeNote and displays it
 const handleNoteView = (e) => {
-  e.preventDefault();
+  //e.preventDefault();
   activeNote = JSON.parse(e.target.parentElement.getAttribute('data-note'));
   renderActiveNote();
 };
